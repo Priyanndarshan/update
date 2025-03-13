@@ -5,15 +5,15 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222.2 47.4% 11.2%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222.2 47.4% 11.2%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 174 100% 29%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -45,7 +45,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%;
+    --primary: 174 100% 29%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -76,149 +76,16 @@
   }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121212;
-    --foreground: #e9ecef;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans, Arial, Helvetica, sans-serif);
-}
-
-.checklist-item {
-  @apply flex items-center mb-3;
-}
-
-.checklist-item > label {
-  @apply ml-2 text-gray-800;
-}
-
-.checklist-checkbox {
-  @apply h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary;
-}
-
-.nav-link {
-  @apply px-4 py-3 text-white hover:bg-primary-dark transition-colors font-medium;
-}
-
-.nav-link.active {
-  @apply bg-primary-dark;
-}
-
 .dashboard-card {
   @apply rounded-lg shadow-sm p-5 bg-card border border-border;
 }
 
-.dashboard-card-pink {
-  @apply bg-light-pink border-l-4 border-l-primary;
-}
-
-.dashboard-card-yellow {
-  @apply bg-light-yellow border-l-4 border-l-warning;
-}
-
-.page-header {
-  @apply text-lg font-bold mb-4 text-gray-800 uppercase tracking-wide;
-}
-
-.card-header {
-  @apply text-xl font-bold mb-4 text-gray-800 pb-2 border-b border-gray-200;
-}
-
-.btn {
-  @apply px-4 py-2 rounded-md font-medium transition-colors;
-}
-
-.btn-primary {
-  @apply bg-primary text-white hover:bg-primary-dark;
-}
-
-.btn-outline {
-  @apply border border-gray-200 hover:bg-gray-100;
-}
-
-.main-header {
-  @apply bg-white border-b border-gray-200 shadow-sm;
-}
-
-.main-nav {
-  @apply bg-primary;
-}
-
-.main-footer {
-  @apply py-4 px-6 text-sm text-gray-600 border-t border-gray-200 bg-white;
-}
-
-.dashboard-container {
-  @apply p-6 bg-gray-50;
+.stat-card {
+  @apply rounded-lg shadow-md p-6 bg-white border border-gray-100;
 }
 
 .dashboard-grid {
   @apply grid grid-cols-1 md:grid-cols-2 gap-6;
-}
-
-.section-title {
-  @apply text-sm font-medium uppercase text-gray-500 tracking-wider mb-4;
-}
-
-.list-circle {
-  list-style-type: circle;
-}
-
-/* Navbar styles to match the image */
-.pet-navbar {
-  @apply bg-primary shadow-md;
-}
-
-.pet-navbar-container {
-  @apply container mx-auto px-4;
-}
-
-.pet-navbar-links {
-  @apply flex items-center;
-}
-
-.pet-navbar-link {
-  @apply px-4 py-3 text-white font-medium hover:bg-primary-dark transition-colors;
-}
-
-.pet-navbar-link.active {
-  @apply bg-primary-dark;
-}
-
-.pet-logo {
-  @apply flex items-center;
-}
-
-.pet-logo-icon {
-  @apply bg-white text-primary font-bold text-lg rounded-sm w-8 h-8 flex items-center justify-center;
-}
-
-.pet-logo-text {
-  @apply ml-2 text-white;
-}
-
-.pet-header {
-  @apply bg-white py-2 px-4 flex justify-between items-center;
-}
-
-.checklist-text {
-  @apply text-gray-800;
-}
-
-.stat-card {
-  @apply rounded-lg shadow-sm p-6 bg-card border border-border;
 }
 
 .stats-grid {
@@ -242,19 +109,19 @@ body {
 }
 
 .nav-header {
-  @apply flex items-center justify-between px-4 py-2 border-b;
+  @apply flex items-center justify-between px-6 py-3 border-b bg-white shadow-sm;
 }
 
 .nav-links {
-  @apply flex items-center space-x-4 px-4;
+  @apply flex items-center space-x-6 px-4;
 }
 
 .nav-link {
-  @apply px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground;
+  @apply px-3 py-2 text-sm font-medium text-gray-600 hover:text-teal-600 transition-colors;
 }
 
 .nav-link.active {
-  @apply text-foreground;
+  @apply text-teal-600 font-semibold;
 }
 
 .search-input {
@@ -267,4 +134,108 @@ body {
 
 .download-button {
   @apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+/* Dashboard specific styles */
+.dashboard-header {
+  @apply flex items-center justify-between mb-6;
+}
+
+.dashboard-title {
+  @apply text-2xl font-bold text-gray-800;
+}
+
+.dashboard-subtitle {
+  @apply text-sm text-gray-500;
+}
+
+.dashboard-main {
+  @apply bg-gray-50 min-h-screen;
+}
+
+.dashboard-footer {
+  @apply py-4 px-6 text-sm text-gray-600 border-t border-gray-200 bg-white;
+}
+
+/* Card styles */
+.card-light {
+  @apply bg-white rounded-lg shadow-md border border-gray-100;
+}
+
+.card-header {
+  @apply p-5 border-b border-gray-100;
+}
+
+.card-content {
+  @apply p-5;
+}
+
+/* Stat card styles */
+.stat-value {
+  @apply text-2xl font-bold text-gray-800;
+}
+
+.stat-title {
+  @apply text-sm font-medium text-gray-500;
+}
+
+.stat-change-positive {
+  @apply text-xs text-green-600;
+}
+
+.stat-change-negative {
+  @apply text-xs text-red-600;
+}
+
+.stat-icon {
+  @apply text-teal-600;
+}
+
+/* Profitever Traders specific styles */
+.pet-header {
+  @apply bg-white py-3 px-6 border-b flex items-center justify-between;
+}
+
+.pet-logo {
+  @apply text-teal-600 font-bold text-xl flex items-center;
+}
+
+.pet-logo-icon {
+  @apply bg-teal-600 text-white p-1 rounded mr-2;
+}
+
+.pet-nav {
+  @apply bg-teal-600 text-white py-2 px-6;
+}
+
+.pet-nav-link {
+  @apply text-white hover:bg-teal-700 px-3 py-2 font-medium;
+}
+
+.pet-breadcrumb {
+  @apply bg-gray-100 py-2 px-6;
+}
+
+.pet-breadcrumb-text {
+  @apply text-sm text-gray-600 uppercase font-medium;
+}
+
+.checklist-item {
+  @apply flex items-start space-x-2 mb-2;
+}
+
+.checklist-label {
+  @apply text-sm text-gray-800 font-medium cursor-pointer;
+}
+
+.disclaimer-text {
+  @apply space-y-3 text-sm;
+}
+
+.disclaimer-list {
+  @apply list-disc pl-5 space-y-1;
+}
+
+.disclaimer-notice {
+  @apply font-medium;
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, CardContent } from '../ui/card';
-import { LucideIcon } from 'lucide-react';
 
 interface StatCardProps {
   title: string;
@@ -13,17 +12,17 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, icon }) => {
   const isPositive = change.startsWith('+');
   
   return (
-    <Card className="stat-card">
-      <CardContent className="p-0">
+    <Card className="card-light overflow-hidden">
+      <CardContent className="p-6">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <h3 className="text-2xl font-bold mt-1">{value}</h3>
-            <p className={`text-xs mt-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+            <p className="stat-title">{title}</p>
+            <h3 className="stat-value mt-1">{value}</h3>
+            <p className={isPositive ? 'stat-change-positive' : 'stat-change-negative'}>
               {change}
             </p>
           </div>
-          <div className="text-muted-foreground">
+          <div className="stat-icon">
             {icon}
           </div>
         </div>

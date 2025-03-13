@@ -31,32 +31,32 @@ const DailyChecklist: React.FC = () => {
   const progressPercentage = (completedCount / totalCount) * 100;
 
   return (
-    <div className="bg-white p-5 rounded-lg shadow-sm">
+    <div className="dashboard-card dashboard-card-pink">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold text-gray-800">DAILY CHECKLIST</h2>
+        <h2 className="text-xl font-bold text-gray-800 border-0">DAILY CHECKLIST</h2>
         <div className="text-sm text-gray-600">
           {completedCount}/{totalCount} completed
         </div>
       </div>
       
-      <div className="w-full bg-gray-200 rounded-full h-1.5 mb-6">
+      <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
         <div 
-          className="bg-primary h-1.5 rounded-full" 
+          className="bg-primary h-2 rounded-full" 
           style={{ width: `${progressPercentage}%` }}
         ></div>
       </div>
       
-      <div>
+      <div className="space-y-2">
         {items.map((item) => (
-          <div key={item.id} className="mb-3 flex items-start">
+          <div key={item.id} className="checklist-item bg-white p-2 rounded border border-gray-100 hover:shadow-sm transition-shadow">
             <input
               type="checkbox"
               id={`checklist-item-${item.id}`}
               checked={item.checked}
               onChange={() => handleCheckboxChange(item.id)}
-              className="mt-1 h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+              className="checklist-checkbox"
             />
-            <label htmlFor={`checklist-item-${item.id}`} className="ml-2 text-sm text-gray-800">{item.text}</label>
+            <label htmlFor={`checklist-item-${item.id}`} className="text-sm cursor-pointer checklist-text">{item.text}</label>
           </div>
         ))}
       </div>

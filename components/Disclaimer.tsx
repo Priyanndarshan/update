@@ -2,7 +2,7 @@ import React from 'react';
 
 const Disclaimer: React.FC = () => {
   return (
-    <div className="bg-white p-5 rounded-lg shadow-sm">
+    <div className="dashboard-card dashboard-card-yellow">
       <h2 className="text-xl font-bold text-gray-800 mb-4">DISCLAIMER</h2>
       <div className="text-sm text-gray-800">
         <p className="mb-3">

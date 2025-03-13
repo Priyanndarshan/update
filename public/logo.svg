@@ -1,0 +1,7 @@
+<svg width="180" height="50" viewBox="0 0 180 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M48.5,10 C48.5,15.5 44.5,20 39.5,20 L30,20 L30,30 L20,30 L20,10 L39.5,10 C44.5,10 48.5,15.5 48.5,10Z" fill="#00A3A3"/>
+  <path d="M20,30 L20,40 L39.5,40 C44.5,40 48.5,35.5 48.5,30 L39.5,30 L30,30 L20,30Z" fill="#00A3A3"/>
+  <path d="M10,20 L20,20 L20,40 L10,40 L10,20Z" fill="#00A3A3"/>
+  <text x="55" y="25" font-family="Arial" font-weight="bold" font-size="16" fill="#00205B">Profitever</text>
+  <text x="55" y="40" font-family="Arial" font-size="14" fill="#00A3A3">Traders</text>
+</svg> 

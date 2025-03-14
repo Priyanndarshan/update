@@ -9,6 +9,24 @@ import {
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { 
   Brain,
   BookOpen,
@@ -118,11 +136,65 @@ const TaskList: React.FC = () => {
   ]);
 
   const [filter, setFilter] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newTask, setNewTask] = useState({
+    title: '',
+    category: 'Analysis' as TradingTask['category'],
+    priority: 'Medium' as TradingTask['priority']
+  });
 
   const handleToggleTask = (taskId: string) => {
     setTasks(tasks.map(task => 
       task.id === taskId ? { ...task, completed: !task.completed } : task
     ));
+  };
+
+  const handleAddTask = () => {
+    if (newTask.title.trim() === '') return;
+    
+    // Generate a new task ID
+    const newId = `TASK-${(tasks.length + 1).toString().padStart(3, '0')}`;
+    
+    // Get the appropriate icon based on category
+    let icon;
+    switch (newTask.category) {
+      case 'Mindset':
+        icon = <Brain className="h-4 w-4 text-amber-500" />;
+        break;
+      case 'Preparation':
+        icon = <BookOpen className="h-4 w-4 text-blue-500" />;
+        break;
+      case 'Strategy':
+        icon = <CheckCircle className="h-4 w-4 text-green-500" />;
+        break;
+      case 'Analysis':
+      default:
+        icon = <LineChart className="h-4 w-4 text-purple-500" />;
+        break;
+    }
+    
+    // Create the new task
+    const taskToAdd: TradingTask = {
+      id: newId,
+      title: newTask.title,
+      category: newTask.category,
+      priority: newTask.priority,
+      completed: false,
+      icon: icon
+    };
+    
+    // Add the new task to the list
+    setTasks([...tasks, taskToAdd]);
+    
+    // Reset the form
+    setNewTask({
+      title: '',
+      category: 'Analysis',
+      priority: 'Medium'
+    });
+    
+    // Close the dialog
+    setIsDialogOpen(false);
   };
 
   const filteredTasks = filter 
@@ -162,7 +234,7 @@ const TaskList: React.FC = () => {
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="bg-white">
+      <CardContent>
         <div className="space-y-3">
           {filteredTasks.map((task) => (
             <div 
@@ -202,10 +274,73 @@ const TaskList: React.FC = () => {
           <p className="text-xs text-gray-500">
             {completedCount} of {tasks.length} tasks completed
           </p>
-          <Button variant="outline" size="sm" className="h-8 text-xs border-gray-200 bg-white text-gray-600 hover:bg-gray-50">
-            <Plus className="h-3 w-3 mr-1" />
-            Add Task
-          </Button>
+          
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 text-xs border-gray-200 bg-white text-gray-600 hover:bg-gray-50">
+                <Plus className="h-3 w-3 mr-1" />
+                Add Task
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add New Task</DialogTitle>
+                <DialogDescription>
+                  Create a new task for your trading checklist.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="task-title">Task Title</Label>
+                  <Input 
+                    id="task-title" 
+                    placeholder="Enter task description" 
+                    value={newTask.title}
+                    onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="task-category">Category</Label>
+                    <Select 
+                      value={newTask.category}
+                      onValueChange={(value) => setNewTask({...newTask, category: value as TradingTask['category']})}
+                    >
+                      <SelectTrigger id="task-category">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Analysis">Analysis</SelectItem>
+                        <SelectItem value="Strategy">Strategy</SelectItem>
+                        <SelectItem value="Preparation">Preparation</SelectItem>
+                        <SelectItem value="Mindset">Mindset</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="task-priority">Priority</Label>
+                    <Select 
+                      value={newTask.priority}
+                      onValueChange={(value) => setNewTask({...newTask, priority: value as TradingTask['priority']})}
+                    >
+                      <SelectTrigger id="task-priority">
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Low">Low</SelectItem>
+                        <SelectItem value="Medium">Medium</SelectItem>
+                        <SelectItem value="High">High</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+                <Button onClick={handleAddTask}>Add Task</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </CardContent>
     </Card>

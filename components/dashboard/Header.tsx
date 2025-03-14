@@ -1,27 +1,28 @@
+"use client";
+
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Avatar } from '@/components/ui/avatar';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { MainNav } from '@/components/dashboard/MainNav';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
-  Search, 
   Bell, 
-  Settings, 
-  HelpCircle, 
-  LogOut, 
-  Moon, 
-  Sun,
-  TrendingUp,
-  BarChart2,
-  BookOpen,
-  Briefcase,
-  Video,
-  Calendar,
-  Download,
-  HelpingHand,
   ChevronDown,
-  Star,
-  Users
+  Users,
+  Target,
+  Goal,
+  Layout,
+  LogOut,
+  User,
+  Settings2
 } from 'lucide-react';
+import { Icons } from '@/components/icons';
 
 interface HeaderProps {
   username: string;
@@ -42,40 +43,8 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
             <span className="text-xl font-bold text-teal-600">Profitever Traders</span>
           </div>
           
-          <nav className="hidden lg:flex items-center space-x-1">
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <BarChart2 className="h-4 w-4 mr-2" />
-              Dashboard
-            </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Briefcase className="h-4 w-4 mr-2" />
-              Portfolio
-            </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Users className="h-4 w-4 mr-2" />
-              PET Zone
-            </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Star className="h-4 w-4 mr-2" />
-              Invest Premium
-            </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Video className="h-4 w-4 mr-2" />
-              Videos
-            </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Calendar className="h-4 w-4 mr-2" />
-              Meetings
-            </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Download className="h-4 w-4 mr-2" />
-              Downloads
-            </Button>
-            <Button variant="ghost" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <HelpingHand className="h-4 w-4 mr-2" />
-              How We Help
-            </Button>
-          </nav>
+          {/* Main Navigation */}
+          <MainNav />
           
           {/* Mobile menu button */}
           <div className="lg:hidden">
@@ -91,39 +60,54 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
           </div>
         </div>
         
-        {/* Search and User Actions */}
-        <div className="flex items-center space-x-4">
-          <div className="relative hidden md:block w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-            <Input
-              type="search"
-              placeholder="Search stocks, news, strategies..."
-              className="pl-9 h-9 bg-gray-50 border-gray-200 focus:bg-white"
-            />
-          </div>
-          
+        {/* User Actions */}
+        <div className="flex items-center">
           <div className="flex items-center space-x-2">
             <Button variant="ghost" size="icon" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50 relative">
               <Bell className="h-5 w-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
             </Button>
             
-            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Moon className="h-5 w-5" />
-            </Button>
-            
-            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Settings className="h-5 w-5" />
-            </Button>
-            
-            <div className="flex items-center space-x-2 ml-2 pl-2 border-l border-gray-200">
-              <Avatar className="h-8 w-8 bg-teal-100 text-teal-600">
-                <span className="font-medium text-sm">{username.charAt(0)}</span>
-              </Avatar>
+            {/* Profile Section */}
+            <div className="flex items-center space-x-3 ml-2 pl-2 border-l border-gray-200">
               <div className="hidden md:block">
-                <p className="text-sm font-medium text-gray-900">{username}</p>
-                <p className="text-xs text-gray-500">Pro Trader</p>
+                <p className="text-sm font-medium text-gray-900">Welcome, Chavan.</p>
               </div>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="rounded-full p-0 h-9 w-9 flex items-center justify-center" aria-label="Profile options">
+                    <Avatar className="h-9 w-9 bg-teal-100 text-teal-600">
+                      <span className="font-medium text-sm">C</span>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-md rounded-md p-1">
+                  <div className="flex items-center p-3 border-b border-gray-100">
+                    <Avatar className="h-8 w-8 bg-teal-100 text-teal-600 mr-2">
+                      <span className="font-medium text-sm">C</span>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">Chavan</p>
+                      <p className="text-xs text-gray-500">Pro Trader</p>
+                    </div>
+                  </div>
+                  <Link href="/profile" passHref>
+                    <DropdownMenuItem className="cursor-pointer text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md my-1 py-2">
+                      <User className="mr-2 h-4 w-4 text-gray-500" />
+                      <span>My Profile</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuItem className="cursor-pointer text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md my-1 py-2">
+                    <Settings2 className="mr-2 h-4 w-4 text-gray-500" />
+                    <span>Account Settings</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md my-1 py-2">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log Out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -134,35 +118,73 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
         <div className="lg:hidden bg-white border-b border-gray-200 py-2 px-4">
           <nav className="flex flex-col space-y-1">
             <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <BarChart2 className="h-4 w-4 mr-2" />
+              <Icons.dashboard className="h-4 w-4 mr-2" />
               Dashboard
             </Button>
             <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Briefcase className="h-4 w-4 mr-2" />
+              <Icons.portfolio className="h-4 w-4 mr-2" />
               Portfolio
             </Button>
+            
+            {/* PET Zone Mobile Section */}
+            <div className="border-l-2 border-teal-500 pl-3 ml-2">
+              <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50 w-full">
+                <Users className="h-4 w-4 mr-2" />
+                PET Zone
+              </Button>
+              <div className="pl-6 space-y-1 mt-1">
+                <Button variant="ghost" size="sm" className="justify-start text-gray-600 hover:text-teal-600 hover:bg-teal-50 w-full">
+                  <Target className="h-3.5 w-3.5 mr-2" />
+                  Focused Area
+                </Button>
+                <Button variant="ghost" size="sm" className="justify-start text-gray-600 hover:text-teal-600 hover:bg-teal-50 w-full">
+                  <Goal className="h-3.5 w-3.5 mr-2" />
+                  Weekly Goals
+                </Button>
+                <Button variant="ghost" size="sm" className="justify-start text-gray-600 hover:text-teal-600 hover:bg-teal-50 w-full">
+                  <Layout className="h-3.5 w-3.5 mr-2" />
+                  Trade Setup
+                </Button>
+              </div>
+            </div>
+            
             <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Users className="h-4 w-4 mr-2" />
-              PET Zone
-            </Button>
-            <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Star className="h-4 w-4 mr-2" />
+              <Icons.investPremium className="h-4 w-4 mr-2" />
               Invest Premium
             </Button>
+            
+            {/* Videos Mobile Section */}
+            <div className="border-l-2 border-teal-500 pl-3 ml-2">
+              <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50 w-full">
+                <Icons.videos className="h-4 w-4 mr-2" />
+                Videos
+              </Button>
+              <div className="pl-6 space-y-1 mt-1">
+                <Button variant="ghost" size="sm" className="justify-start text-gray-600 hover:text-teal-600 hover:bg-teal-50 w-full">
+                  <Icons.videos className="h-3.5 w-3.5 mr-2" />
+                  Live Sessions
+                </Button>
+                <Button variant="ghost" size="sm" className="justify-start text-gray-600 hover:text-teal-600 hover:bg-teal-50 w-full">
+                  <Icons.tradeSetup className="h-3.5 w-3.5 mr-2" />
+                  Trade Align Setup
+                </Button>
+                <Button variant="ghost" size="sm" className="justify-start text-gray-600 hover:text-teal-600 hover:bg-teal-50 w-full">
+                  <Icons.focusedArea className="h-3.5 w-3.5 mr-2" />
+                  Pre Trade Plan
+                </Button>
+              </div>
+            </div>
+            
             <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Video className="h-4 w-4 mr-2" />
-              Videos
-            </Button>
-            <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Calendar className="h-4 w-4 mr-2" />
+              <Icons.meetings className="h-4 w-4 mr-2" />
               Meetings
             </Button>
             <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <Download className="h-4 w-4 mr-2" />
+              <Icons.downloads className="h-4 w-4 mr-2" />
               Downloads
             </Button>
             <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
-              <HelpingHand className="h-4 w-4 mr-2" />
+              <Icons.help className="h-4 w-4 mr-2" />
               How We Help
             </Button>
           </nav>
@@ -170,7 +192,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
       )}
       
       {/* Market Status Bar */}
-      <div className="bg-gray-50 border-b border-gray-200 py-1.5 px-4 text-sm">
+      <div className="bg-gray-50 border-b border-gray-200 py-1 px-4 text-xs overflow-x-auto">
         <div className="container mx-auto flex items-center justify-between overflow-x-auto">
           <div className="flex items-center space-x-6">
             <div className="flex items-center">

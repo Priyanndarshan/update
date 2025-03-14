@@ -98,7 +98,7 @@ export function MainNav() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/invest-premium" legacyBehavior passHref>
+          <Link href="/investment-premium" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               <Icons.investPremium className="h-4 w-4 mr-2" />
               Invest Premium

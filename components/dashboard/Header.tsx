@@ -150,7 +150,7 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
             
             <Button variant="ghost" className="justify-start text-gray-700 hover:text-teal-600 hover:bg-teal-50">
               <Icons.investPremium className="h-4 w-4 mr-2" />
-              Invest Premium
+              <Link href="/investment-premium">Invest Premium</Link>
             </Button>
             
             {/* Videos Mobile Section */}

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { format } from 'date-fns';
-import { Calendar as CalendarIcon, Search, Filter, X, Download, ArrowUpDown } from 'lucide-react';
+import { Search, Filter, X, Download, ArrowUpDown, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,12 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
+import { DatePicker } from '@/components/ui/date-picker';
 import {
   Table,
   TableBody,
@@ -43,6 +38,22 @@ const focusedAreaData = [
   { id: 9, date: new Date(2025, 2, 7), title: 'NIFTY', action: 'Download' },
 ];
 
+// Month names for the date filter
+const months = [
+  { value: "1", label: "January" },
+  { value: "2", label: "February" },
+  { value: "3", label: "March" },
+  { value: "4", label: "April" },
+  { value: "5", label: "May" },
+  { value: "6", label: "June" },
+  { value: "7", label: "July" },
+  { value: "8", label: "August" },
+  { value: "9", label: "September" },
+  { value: "10", label: "October" },
+  { value: "11", label: "November" },
+  { value: "12", label: "December" },
+];
+
 export default function FocusedAreaPage() {
   const [fromDate, setFromDate] = React.useState<Date | undefined>(undefined);
   const [toDate, setToDate] = React.useState<Date | undefined>(undefined);
@@ -50,6 +61,7 @@ export default function FocusedAreaPage() {
   const [selectedYear, setSelectedYear] = React.useState<string>("");
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [sortConfig, setSortConfig] = React.useState<{ key: string; direction: 'ascending' | 'descending' } | null>(null);
+  const [dateFilterType, setDateFilterType] = React.useState<'range' | 'month'>('range');
 
   // Filter data based on search query and date filters
   const filteredData = React.useMemo(() => {
@@ -71,9 +83,21 @@ export default function FocusedAreaPage() {
         }
       }
       
+      // Apply month/year filter
+      if (selectedMonth && selectedYear) {
+        const month = parseInt(selectedMonth, 10) - 1; // JavaScript months are 0-indexed
+        const year = parseInt(selectedYear, 10);
+        const itemMonth = item.date.getMonth();
+        const itemYear = item.date.getFullYear();
+        
+        if (itemMonth !== month || itemYear !== year) {
+          return false;
+        }
+      }
+      
       return true;
     });
-  }, [focusedAreaData, searchQuery, fromDate, toDate]);
+  }, [focusedAreaData, searchQuery, fromDate, toDate, selectedMonth, selectedYear]);
 
   // Sort data
   const sortedData = React.useMemo(() => {
@@ -115,12 +139,23 @@ export default function FocusedAreaPage() {
 
   const handleMonthChange = (value: string) => {
     setSelectedMonth(value);
-    // You could implement logic to set fromDate and toDate based on month
+    if (value && !selectedYear) {
+      // Default to current year if month is selected but year isn't
+      setSelectedYear(new Date().getFullYear().toString());
+    }
   };
 
   const handleYearChange = (value: string) => {
     setSelectedYear(value);
-    // You could implement logic to set fromDate and toDate based on year
+  };
+
+  const toggleDateFilterType = () => {
+    setDateFilterType(dateFilterType === 'range' ? 'month' : 'range');
+    // Clear existing filters when switching modes
+    setFromDate(undefined);
+    setToDate(undefined);
+    setSelectedMonth("");
+    setSelectedYear("");
   };
 
   return (
@@ -137,107 +172,105 @@ export default function FocusedAreaPage() {
 
       <Card className="mb-8 border-gray-200 shadow-sm">
         <CardHeader className="pb-3 border-b border-gray-100">
-          <CardTitle className="text-lg font-medium text-gray-700">Filter Options</CardTitle>
+          <div className="flex justify-between items-center">
+            <CardTitle className="text-lg font-medium text-gray-700">Filter Options</CardTitle>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500">Filter by:</span>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={toggleDateFilterType}
+                className="text-xs h-8 border-gray-200 bg-white"
+              >
+                {dateFilterType === 'range' ? 'Date Range' : 'Month & Year'}
+                <ChevronDown className="ml-1 h-3 w-3" />
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="pt-4">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {/* From Date */}
-            <div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal border-gray-200",
-                      !fromDate && "text-gray-500"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {fromDate ? format(fromDate, "PPP") : "From Date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={fromDate}
-                    onSelect={setFromDate}
-                    initialFocus
+            {dateFilterType === 'range' ? (
+              // Date Range Filter
+              <>
+                {/* From Date */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                  <DatePicker 
+                    date={fromDate} 
+                    setDate={(date: Date | undefined) => {
+                      if (date) setFromDate(date);
+                    }} 
+                    placeholder="Select start date"
+                    defaultMonth={new Date(2025, 2)}
+                    className="w-full"
                   />
-                </PopoverContent>
-              </Popover>
-            </div>
+                </div>
 
-            {/* To Date */}
-            <div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal border-gray-200",
-                      !toDate && "text-gray-500"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {toDate ? format(toDate, "PPP") : "To Date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={toDate}
-                    onSelect={setToDate}
-                    initialFocus
+                {/* To Date */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                  <DatePicker 
+                    date={toDate} 
+                    setDate={(date: Date | undefined) => {
+                      if (date) setToDate(date);
+                    }} 
+                    placeholder="Select end date"
+                    defaultMonth={fromDate || new Date(2025, 2)}
+                    disabled={(date) => 
+                      (fromDate ? date < fromDate : false) || 
+                      date > new Date()
+                    }
+                    className="w-full"
                   />
-                </PopoverContent>
-              </Popover>
-            </div>
+                </div>
+              </>
+            ) : (
+              // Month & Year Filter
+              <>
+                {/* Month Select */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Month</label>
+                  <Select value={selectedMonth} onValueChange={handleMonthChange}>
+                    <SelectTrigger className="border-gray-200 bg-white">
+                      <SelectValue placeholder="Select Month" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {months.map((month) => (
+                        <SelectItem key={month.value} value={month.value}>
+                          {month.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            {/* Month Select */}
-            <div>
-              <Select value={selectedMonth} onValueChange={handleMonthChange}>
-                <SelectTrigger className="border-gray-200">
-                  <SelectValue placeholder="Select Month" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">January</SelectItem>
-                  <SelectItem value="2">February</SelectItem>
-                  <SelectItem value="3">March</SelectItem>
-                  <SelectItem value="4">April</SelectItem>
-                  <SelectItem value="5">May</SelectItem>
-                  <SelectItem value="6">June</SelectItem>
-                  <SelectItem value="7">July</SelectItem>
-                  <SelectItem value="8">August</SelectItem>
-                  <SelectItem value="9">September</SelectItem>
-                  <SelectItem value="10">October</SelectItem>
-                  <SelectItem value="11">November</SelectItem>
-                  <SelectItem value="12">December</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Year Select */}
-            <div>
-              <Select value={selectedYear} onValueChange={handleYearChange}>
-                <SelectTrigger className="border-gray-200">
-                  <SelectValue placeholder="Select Year" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="2023">2023</SelectItem>
-                  <SelectItem value="2024">2024</SelectItem>
-                  <SelectItem value="2025">2025</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+                {/* Year Select */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                  <Select value={selectedYear} onValueChange={handleYearChange}>
+                    <SelectTrigger className="border-gray-200 bg-white">
+                      <SelectValue placeholder="Select Year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="2023">2023</SelectItem>
+                      <SelectItem value="2024">2024</SelectItem>
+                      <SelectItem value="2025">2025</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </>
+            )}
 
             {/* Search */}
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
                 <Input
                   type="text"
-                  placeholder="Search"
-                  className="pl-9 border-gray-200"
+                  placeholder="Search by title"
+                  className="pl-9 border-gray-200 bg-white"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -245,20 +278,20 @@ export default function FocusedAreaPage() {
             </div>
           </div>
 
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-6">
             <Button 
               variant="default" 
               size="sm" 
-              className="bg-teal-500 hover:bg-teal-600"
+              className="bg-teal-500 hover:bg-teal-600 text-white px-4"
             >
               <Filter className="mr-2 h-4 w-4" />
-              Filter
+              Apply Filters
             </Button>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={clearFilters}
-              className="border-gray-200 text-gray-700 hover:text-gray-900"
+              className="border-gray-200 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
             >
               <X className="mr-2 h-4 w-4" />
               Clear
@@ -269,6 +302,16 @@ export default function FocusedAreaPage() {
 
       <Card className="border-gray-200 shadow-sm">
         <CardContent className="p-0">
+          <div className="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h3 className="font-medium text-gray-700">Results ({sortedData.length})</h3>
+            <Badge variant="outline" className="bg-teal-50 text-teal-700 border-teal-200">
+              {sortConfig?.key === 'date' 
+                ? `Sorted by Date: ${sortConfig.direction === 'ascending' ? 'Oldest First' : 'Newest First'}`
+                : sortConfig?.key === 'title'
+                  ? `Sorted by Title: ${sortConfig.direction === 'ascending' ? 'A-Z' : 'Z-A'}`
+                  : 'Default Sort'}
+            </Badge>
+          </div>
           <Table>
             <TableHeader className="bg-gray-50">
               <TableRow>
@@ -327,7 +370,7 @@ export default function FocusedAreaPage() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={4} className="h-24 text-center text-gray-500">
-                    No results found.
+                    No results found. Try adjusting your filters.
                   </TableCell>
                 </TableRow>
               )}

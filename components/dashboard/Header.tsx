@@ -71,24 +71,24 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
             {/* Profile Section */}
             <div className="flex items-center space-x-3 ml-2 pl-2 border-l border-gray-200">
               <div className="hidden md:block">
-                <p className="text-sm font-medium text-gray-900">Welcome, Chavan.</p>
+                <p className="text-sm font-medium text-gray-900">Welcome, {username}</p>
               </div>
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="rounded-full p-0 h-9 w-9 flex items-center justify-center" aria-label="Profile options">
                     <Avatar className="h-9 w-9 bg-teal-100 text-teal-600">
-                      <span className="font-medium text-sm">C</span>
+                      <span className="font-medium text-sm">{username.charAt(0)}</span>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-md rounded-md p-1">
                   <div className="flex items-center p-3 border-b border-gray-100">
                     <Avatar className="h-8 w-8 bg-teal-100 text-teal-600 mr-2">
-                      <span className="font-medium text-sm">C</span>
+                      <span className="font-medium text-sm">{username.charAt(0)}</span>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">Chavan</p>
+                      <p className="text-sm font-medium text-gray-900">{username}</p>
                       <p className="text-xs text-gray-500">Pro Trader</p>
                     </div>
                   </div>
@@ -190,43 +190,6 @@ const Header: React.FC<HeaderProps> = ({ username }) => {
           </nav>
         </div>
       )}
-      
-      {/* Market Status Bar */}
-      <div className="bg-gray-50 border-b border-gray-200 py-1 px-4 text-xs overflow-x-auto">
-        <div className="container mx-auto flex items-center justify-between overflow-x-auto">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-center">
-              <span className="text-gray-600 mr-2">S&P 500</span>
-              <span className="font-medium text-green-600">4,927.11</span>
-              <span className="text-green-600 ml-1">+0.38%</span>
-            </div>
-            <div className="flex items-center">
-              <span className="text-gray-600 mr-2">NASDAQ</span>
-              <span className="font-medium text-green-600">15,628.04</span>
-              <span className="text-green-600 ml-1">+0.52%</span>
-            </div>
-            <div className="flex items-center">
-              <span className="text-gray-600 mr-2">DOW</span>
-              <span className="font-medium text-red-600">38,671.69</span>
-              <span className="text-red-600 ml-1">-0.14%</span>
-            </div>
-            <div className="flex items-center">
-              <span className="text-gray-600 mr-2">VIX</span>
-              <span className="font-medium text-amber-600">18.62</span>
-              <span className="text-amber-600 ml-1">+5.21%</span>
-            </div>
-          </div>
-          <div className="flex items-center whitespace-nowrap">
-            <span className="text-gray-600 mr-2">Market Status:</span>
-            <span className="text-green-600 font-medium flex items-center">
-              <span className="h-2 w-2 bg-green-500 rounded-full mr-1.5"></span>
-              Open
-            </span>
-            <span className="text-gray-600 mx-2">|</span>
-            <span className="text-gray-600">Last Updated: 10:45 AM EST</span>
-          </div>
-        </div>
-      </div>
     </header>
   );
 };
